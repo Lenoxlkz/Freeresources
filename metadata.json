@@ -1,0 +1,6 @@
+{
+  "name": "OpenStream - Apps de Música Open-Source",
+  "description": "Directorio de apps de música de código abierto: clientes de YouTube Music y Spotify, reproductores offline y herramientas de descarga para Android, iOS, Windows, macOS y Linux.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

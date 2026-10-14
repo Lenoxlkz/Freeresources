@@ -1,0 +1,650 @@
+[
+  {
+    "id": "archivetune",
+    "name": "ArchiveTune",
+    "configuredRepo": "rukamori/ArchiveTune",
+    "status": 200,
+    "realFullName": "rukamori/ArchiveTune",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 19,
+    "latestRelease": "v15.1.0",
+    "stars": 7115
+  },
+  {
+    "id": "auramusic",
+    "name": "AuraMusic",
+    "configuredRepo": "Heet-2004/AuraMusic",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "bitchord",
+    "name": "BitChord",
+    "configuredRepo": "BitChord/BitChord",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "bloomeetunes",
+    "name": "BloomeeTunes",
+    "configuredRepo": "bimsina/BloomeeTunes",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "echo-music",
+    "name": "Echo Music",
+    "configuredRepo": "Aghajari/Echo",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "gyawun",
+    "name": "Gyawun Music",
+    "configuredRepo": "anandnet/Gyawun",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "just-listen",
+    "name": "Just-Listen",
+    "configuredRepo": "TheGB4/Just-Listen",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "kreate",
+    "name": "Kreate",
+    "configuredRepo": "KreateApp/Kreate",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "lyramusic",
+    "name": "lyraMusic",
+    "configuredRepo": "lyraMusicApp/lyraMusic",
+    "status": 200,
+    "realFullName": "lyraMusicApp/lyraMusic",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 12,
+    "latestRelease": "v3.0.11",
+    "stars": 49
+  },
+  {
+    "id": "m3-play",
+    "name": "M3-Play",
+    "configuredRepo": "m3-play/m3-play",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "meld",
+    "name": "Meld",
+    "configuredRepo": "meld-music/meld",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "metrolist",
+    "name": "Metrolist",
+    "configuredRepo": "vfsfitvnm/Metrolist",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "music-you",
+    "name": "Music-You",
+    "configuredRepo": "Bnyro/Music-You",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "musify",
+    "name": "Musify",
+    "configuredRepo": "gokadzev/Musify",
+    "status": 200,
+    "realFullName": "gokadzev/Musify",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "10.5.3",
+    "stars": 4323
+  },
+  {
+    "id": "muzo",
+    "name": "Muzo",
+    "configuredRepo": "muzo-music/muzo",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "muzza",
+    "name": "Muzza",
+    "configuredRepo": "muzza-app/muzza",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "namida",
+    "name": "Namida",
+    "configuredRepo": "namidaco/namida",
+    "status": 200,
+    "realFullName": "namidaco/namida",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 20,
+    "latestRelease": "v7.1.2",
+    "stars": 6633
+  },
+  {
+    "id": "nomatune",
+    "name": "NomaTune",
+    "configuredRepo": "nomatune/nomatune",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "n-zik",
+    "name": "N-Zik",
+    "configuredRepo": "n-zik/n-zik",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "riplay",
+    "name": "RiPlay",
+    "configuredRepo": "fast4x/RiPlay",
+    "status": 200,
+    "realFullName": "fast4x/RiPlay",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "v0.7.99",
+    "stars": 472
+  },
+  {
+    "id": "simpmusic",
+    "name": "SimpMusic",
+    "configuredRepo": "maxrave-dev/SimpMusic",
+    "status": 200,
+    "realFullName": "maxrave-dev/SimpMusic",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "v2.3.0",
+    "stars": 12007
+  },
+  {
+    "id": "soundpod",
+    "name": "SoundPod",
+    "configuredRepo": "SoundPod/SoundPod",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "spatialflow",
+    "name": "SpatialFlow",
+    "configuredRepo": "spatialflow/spatialflow",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "tryptify",
+    "name": "Tryptify",
+    "configuredRepo": "tryptify/tryptify",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "velune",
+    "name": "Velune",
+    "configuredRepo": "velune/velune",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "vitune",
+    "name": "ViTune",
+    "configuredRepo": "vitune/vitune",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "vivi-music",
+    "name": "VIVI Music",
+    "configuredRepo": "vivi-music/vivi-music",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "vimusic",
+    "name": "ViMusic",
+    "configuredRepo": "vfsfitvnm/ViMusic",
+    "status": 200,
+    "realFullName": "vfsfitvnm/ViMusic",
+    "isRedirect": false,
+    "isArchived": true,
+    "releaseCount": 20,
+    "latestRelease": "v0.5.4",
+    "stars": 9466
+  },
+  {
+    "id": "rimusic",
+    "name": "RiMusic",
+    "configuredRepo": "fast4x/RiMusic",
+    "status": 200,
+    "realFullName": "fast4x/RiMusic",
+    "isRedirect": false,
+    "isArchived": true,
+    "releaseCount": 30,
+    "latestRelease": "v0.6.76",
+    "stars": 3900
+  },
+  {
+    "id": "innertune",
+    "name": "InnerTune",
+    "configuredRepo": "z-huang/InnerTune",
+    "status": 200,
+    "realFullName": "z-huang/InnerTune",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 26,
+    "latestRelease": "v0.5.10",
+    "stars": 6121
+  },
+  {
+    "id": "audiofy",
+    "name": "Audiofy",
+    "configuredRepo": "audiofy-music/audiofy",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "auxio",
+    "name": "Auxio",
+    "configuredRepo": "OxygenCobalt/Auxio",
+    "status": 200,
+    "realFullName": "OxygenCobalt/Auxio",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "v4.1.5",
+    "stars": 4362
+  },
+  {
+    "id": "boomingmusic",
+    "name": "BoomingMusic",
+    "configuredRepo": "booming-music/booming",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "cutemusic",
+    "name": "CuteMusic (Chocola)",
+    "configuredRepo": "cutemusic/cutemusic",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "elovaire",
+    "name": "Elovaire",
+    "configuredRepo": "elovaire/elovaire",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "gramophone",
+    "name": "Gramophone",
+    "configuredRepo": "AkaneTan/Gramophone",
+    "status": 301,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "lotus",
+    "name": "Lotus",
+    "configuredRepo": "lotus-player/lotus",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "lune",
+    "name": "Lune",
+    "configuredRepo": "lune-audio/lune",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "mucke",
+    "name": "mucke",
+    "configuredRepo": "mucke-music/mucke",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "simple-music-player",
+    "name": "Music (Simple Mobile Tools)",
+    "configuredRepo": "SimpleMobileTools/Simple-Music-Player",
+    "status": 200,
+    "realFullName": "SimpleMobileTools/Simple-Music-Player",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "5.18.3",
+    "stars": 1400
+  },
+  {
+    "id": "oneplayer",
+    "name": "OnePlayer",
+    "configuredRepo": "oneplayer/oneplayer",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "phonograph-plus",
+    "name": "Phonograph Plus",
+    "configuredRepo": "chr56/Phonograph_Plus",
+    "status": 200,
+    "realFullName": "chr56/Phonograph_Plus",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "v2.0.2",
+    "stars": 732
+  },
+  {
+    "id": "pixel-player-oss",
+    "name": "Pixel Player OSS",
+    "configuredRepo": "pixelplayer/pixelplayer",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "retro-music",
+    "name": "Retro Music Player",
+    "configuredRepo": "RetroMusicPlayer/RetroMusicPlayer",
+    "status": 200,
+    "realFullName": "RetroMusicPlayer/RetroMusicPlayer",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "v7.0.3",
+    "stars": 5350
+  },
+  {
+    "id": "rhythm",
+    "name": "Rhythm",
+    "configuredRepo": "rhythm-music/rhythm",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "stash",
+    "name": "Stash",
+    "configuredRepo": "stash-music/stash",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "nora",
+    "name": "Nora",
+    "configuredRepo": "miZyind/Nora",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "hifidelity",
+    "name": "HiFidelity",
+    "configuredRepo": "HiFidelity/HiFidelity",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "harmonoid",
+    "name": "Harmonoid",
+    "configuredRepo": "harmonoid/harmonoid",
+    "status": 200,
+    "realFullName": "harmonoid/harmonoid",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 28,
+    "latestRelease": "v0.3.32",
+    "stars": 4782
+  },
+  {
+    "id": "tauon-music-box",
+    "name": "Tauon Music Box",
+    "configuredRepo": "Taiko2k/TauonMusicBox",
+    "status": 301,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "spotube",
+    "name": "Spotube",
+    "configuredRepo": "KRTirtho/spotube",
+    "status": 301,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "spotui",
+    "name": "Spotui",
+    "configuredRepo": "ericfitzgerald/spotui",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "sonora",
+    "name": "Sonora",
+    "configuredRepo": "sonorahq/sonora",
+    "status": 200,
+    "realFullName": "sonorahq/sonora",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "v0.43.0",
+    "stars": 2004
+  },
+  {
+    "id": "psst",
+    "name": "Psst",
+    "configuredRepo": "jpochyla/psst",
+    "status": 200,
+    "realFullName": "jpochyla/psst",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 1,
+    "latestRelease": "rolling",
+    "stars": 9491
+  },
+  {
+    "id": "spicetify-cli",
+    "name": "Spicetify",
+    "configuredRepo": "spicetify/cli",
+    "status": 200,
+    "realFullName": "spicetify/cli",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "v2.45.3",
+    "stars": 24989
+  },
+  {
+    "id": "limusic",
+    "name": "limusic",
+    "configuredRepo": "limusic-dev/limusic",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "pear-desktop",
+    "name": "Pear Desktop",
+    "configuredRepo": "pear-desktop/pear",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "muffon",
+    "name": "muffon",
+    "configuredRepo": "muffon/muffon",
+    "status": 404,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "nuclear",
+    "name": "Nuclear",
+    "configuredRepo": "nukeop/nuclear",
+    "status": 200,
+    "realFullName": "nukeop/nuclear",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "player@1.51.1",
+    "stars": 18681
+  },
+  {
+    "id": "ytmusicultimate",
+    "name": "YTMusicUltimate",
+    "configuredRepo": "ginsudev/YTMusicUltimate",
+    "status": 301,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "monochrome",
+    "name": "Monochrome",
+    "configuredRepo": "monochrome-music/monochrome",
+    "status": 200,
+    "realFullName": "monochrome-music/monochrome",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null,
+    "stars": 6689
+  },
+  {
+    "id": "navidrome",
+    "name": "Navidrome",
+    "configuredRepo": "deluan/navidrome",
+    "status": 301,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "supersonic",
+    "name": "Supersonic",
+    "configuredRepo": "dweymouth/supersonic",
+    "status": 301,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null
+  },
+  {
+    "id": "yt-dlp",
+    "name": "yt-dlp",
+    "configuredRepo": "yt-dlp/yt-dlp",
+    "status": 200,
+    "realFullName": "yt-dlp/yt-dlp",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 30,
+    "latestRelease": "2026.08.19",
+    "stars": 197613
+  },
+  {
+    "id": "spotiflac",
+    "name": "SpotiFlac",
+    "configuredRepo": "spotiflac/spotiflac",
+    "status": 200,
+    "realFullName": "spotiflac/spotiflac",
+    "isRedirect": false,
+    "isArchived": false,
+    "releaseCount": 0,
+    "latestRelease": null,
+    "stars": 2
+  }
+]

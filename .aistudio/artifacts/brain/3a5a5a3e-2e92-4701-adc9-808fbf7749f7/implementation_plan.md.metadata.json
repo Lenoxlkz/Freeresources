@@ -1,0 +1,6 @@
+{
+  "summary": "Plan de implementación para la integración directa con GitHub REST API v3, carga progresiva con IntersectionObserver, gestión opcional de Personal Access Token (5000 req/hr), resolución precisa de repositorios, releases con descargas directas y enlaces oficiales verificados a Flathub, F-Droid, IzzyOnDroid y GitHub Releases.",
+  "updatedAt": "2026-10-13T21:58:45.879245080Z",
+  "requestFeedback": true,
+  "userFacing": true
+}
