@@ -87,7 +87,7 @@ export const AppCard: React.FC<AppCardProps> = ({
     return (
       <article
         ref={cardRef}
-        className="group relative flex flex-col md:flex-row md:items-center gap-4 bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700/80 rounded-xl px-4 py-3.5 transition-all duration-200"
+        className="group relative flex flex-col md:flex-row md:items-center gap-4 bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700/80 rounded-xl px-4 py-3.5 transition-all duration-150 animate-card-slide"
       >
         {/* Identity: name, metadata, tagline */}
         <div className="min-w-0 md:flex-1">
@@ -232,7 +232,7 @@ export const AppCard: React.FC<AppCardProps> = ({
   return (
     <article 
       ref={cardRef}
-      className="group relative flex flex-col justify-between bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700/80 rounded-xl p-5 transition-all duration-200"
+      className="group relative flex flex-col justify-between bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700/80 rounded-xl p-5 transition-all duration-150 animate-card-slide"
     >
       {/* Top Header Zone: App Name & Actions */}
       <div>

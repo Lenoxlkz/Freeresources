@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Search, Sparkles, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { OpenFreedomLogo } from './OpenFreedomLogo';
 
 interface HeroSectionProps {
   searchQuery: string;
@@ -48,20 +49,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header content */}
+        {/* Header content con logo original y OpenFreedom posicionado debajo */}
         <div className="max-w-3xl">
-          <div className="flex items-center gap-2 text-xs font-medium text-emerald-400 mb-3 flex-wrap">
-            <Sparkles className="w-4 h-4" />
-            <span className="tracking-wider uppercase">{t.hero.badge}</span>
-            <span className="text-slate-600" aria-hidden="true">·</span>
-            <span className="text-slate-400">{t.footer.openSourceCatalog}</span>
+          <div className="flex flex-col items-start gap-3">
+            <OpenFreedomLogo size={56} showText={false} />
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.1] text-balance">
+              OpenFreedom
+            </h1>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15] text-balance">
-            {t.hero.title} <span className="text-emerald-400">{t.hero.titleHighlight}</span>
-          </h1>
-
-          <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
+          <p className="mt-3 text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
             {t.hero.subtitle}
           </p>
         </div>

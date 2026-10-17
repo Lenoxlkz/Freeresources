@@ -27,7 +27,7 @@ export const InstallGuideModal: React.FC<InstallGuideModalProps> = ({ isOpen, on
       aria-labelledby="guide-modal-title"
     >
       <div 
-        className="relative w-full max-w-3xl bg-[#0F1420] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-3xl bg-[#0F1420] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal-window"
         onClick={(e) => e.stopPropagation()}
       >
         

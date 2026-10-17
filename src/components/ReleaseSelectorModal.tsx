@@ -239,7 +239,7 @@ export const ReleaseSelectorModal: React.FC<ReleaseSelectorModalProps> = ({
     >
       <div 
         ref={modalRef}
-        className="relative w-full max-w-3xl bg-[#0B0F19] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+        className="relative w-full max-w-3xl bg-[#0B0F19] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-modal-window"
         onClick={(e) => e.stopPropagation()}
       >
         

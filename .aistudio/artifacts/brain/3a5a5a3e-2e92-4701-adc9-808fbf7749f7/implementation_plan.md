@@ -1,106 +1,91 @@
-# OpenStream: Integración Directa con GitHub REST API & Verificación Automática en Vivo
+# OpenFreedom · Identidad Original, Corrección Móvil y Animaciones Fluidas 0.5x
 
-Arquitectura y plan de implementación para conectar OpenStream directamente a la API REST de GitHub (`https://api.github.com`), permitiendo la carga progresiva y en tiempo real de estrellas exactas, últimos lanzamientos con enlaces de descarga directa de APK/binarios, commits recientes y URLs oficiales verificadas de repositorios y fuentes de distribución (Flathub, F-Droid, IzzyOnDroid).
+Plan de ingeniería y diseño para renombrar la marca a **OpenFreedom** con un nuevo logotipo original de vector SVG (onda sonora estilizada en forma de alas de libertad con el título posicionado debajo del isotipo), solucionar el desbordamiento de la barra superior en dispositivos móviles (evitando el recorte de los botones de idioma, cuota y GitHub evidenciado en la captura), e implementar un motor de animaciones ultra fluidas de alto rendimiento calibradas a escala x0.5 en toda la interfaz.
 
 ### User Review & Critical Decisions
 
 > [!IMPORTANT]
-> Decisiones técnicas confirmadas según las respuestas de clarificación del usuario:
-
-- **Límite de Tasa y Autenticación (Confirmado)**: Sistema de caché persistente inteligente (`localStorage` con expiración) complementado con un selector accesible en el TopBar para que el usuario pueda opcionalmente ingresar su propio GitHub Personal Access Token (`ghp_...`), elevando la cuota de peticiones de 60/hora a 5,000/hora con almacenamiento local seguro en el navegador.
-- **Estrategia de Carga en Tiempo Real (Confirmado)**: Carga progresiva y no bloqueante mediante observador de visibilidad (`IntersectionObserver`). Las aplicaciones consultan la API de GitHub únicamente cuando su tarjeta ingresa al campo visual del usuario, optimizando el consumo de red y cuota.
-- **Datos Mostrados en Vivo (Confirmado)**: Estrellas exactas en tiempo real, versión y etiqueta del último release publicado, enlace de descarga directa de instaladores (`.apk`, `.exe`, `.dmg`, `.flatpak`), contador de forks y fecha del último commit.
-- **Corrección Exhaustiva de Fuentes de Instalación**: Mapeo estricto de URLs y esquemas oficiales para:
-  - **F-Droid**: URLs canónicas `https://f-droid.org/packages/{id}/`
-  - **IzzyOnDroid**: `https://apt.izzysoft.de/fdroid/index/apk/{id}/`
-  - **Flathub**: `https://flathub.org/apps/{id}`
-  - **GitHub Releases**: `https://github.com/{owner}/{repo}/releases/latest` con activos directos parseados desde la API.
+> Decisiones confirmadas durante la fase interactiva de preguntas:
+>
+> - **Identidad y Logotipo (Confirmado)**: Cambio de nombre a **OpenFreedom**. Creación de un isotipo vectorial original exclusivo que fusiona barras de ecualización/onda sonora ascendentes con la silueta geométrica de alas de libertad en gradiente esmeralda (`#10B981`) y cian (`#06B6D4`). En la cabecera y el hero, el nombre "OpenFreedom" se sitúa de forma armónica respecto al logotipo.
+> - **Ajuste Móvil de la Barra Superior (Confirmado)**: Rediseño responsivo de la barra superior (`TopBar.tsx`). Para pantallas móviles ($\le 480\text{px}$), se implementa un diseño compacto que distribuye el ancho de forma proporcional: isotipo con wordmark compacto `shrink`, botones de Idioma (`ES` / `EN`), Cuota (`🔑 60`) y GitHub en versiones micro con padding ajustado (`px-2 py-1`), garantizando que **ningún botón quede cortado fuera de la pantalla**.
+> - **Sistema de Animaciones Ultra-Rápidas a Escala 0.5x (Confirmado)**: Configuración global en Tailwind/CSS y Framer Motion:
+>   - *Escala de animación de ventana*: 1x (despliegue completo y suave sin deformaciones).
+>   - *Escala de animación de transición*: x0.5 (tiempo de respuesta rápido de 150ms a 200ms con curva `cubic-bezier(0.16, 1, 0.3, 1)`).
+>   - *Escala de duración*: x0.5 (animaciones de apertura de modales, filtrado de tarjetas, hover interactivo y pestañas con latencia reducida a la mitad para una sensación nativa ágil).
 
 ---
 
 ### 1. Overview & Core Concept
 
-- **Qué hace**: Conecta cada tarjeta del directorio a la API REST oficial de GitHub (`Accept: application/vnd.github+json`, `X-GitHub-Api-Version: 2022-11-28`). En lugar de depender de metadatos estáticos desactualizados, la plataforma recupera datos vivos sobre la marcha, detectando automáticamente si un proyecto tiene nuevos releases, cambios de repositorio o nuevas estrellas.
-- **Público Objetivo**: Usuarios que necesitan saber con certeza qué apps están activamente mantenidas, cuál es la versión más reciente lista para instalar y dónde obtener el binario oficial sin intermediarios.
-- **Valor Principal**: Resuelve de raíz las URLs incorrectas o desactualizadas, mostrando datos transparentes, verificables y directamente conectados al ecosistema de código abierto.
+- **What It Does**: Renueva la identidad visual bajo el nombre **OpenFreedom**, dotando al proyecto de un emblema original y reconocible. Resuelve de raíz el problema de layout en smartphones donde los botones de control se salían del margen derecho, y eleva la percepción de fluidez mediante aceleración de transiciones al 50% del tiempo estándar.
+- **Target Audience / Persona**: Usuarios móviles y de escritorio que navegan en busca de software libre de audio y valoran una interfaz rápida, precisa, sin bugs visuales en pantallas pequeñas y con respuesta inmediata al tacto.
+- **Key Value**: Acceso táctil inmediato a todos los controles (idioma, cuota, sincronización) en cualquier resolución de teléfono, identidad fresca con logo exclusivo y una experiencia de navegación hiper-reactiva.
 
 ---
 
 ### 2. User Experience & Visual Design
 
-#### Key User Flows
-1. **Navegación Fluida con Carga Progresiva**:
-   - Al desplazarse por el catálogo, cada tarjeta detecta su visibilidad y solicita de forma asíncrona sus métricas a la API de GitHub.
-   - Mientras carga, muestra un indicador sutil de sincronización y luego reemplaza los valores de estrellas, forks y release con números tabulares vivos.
-2. **Acceso Directo a Descargas Reales del Release**:
-   - Si la API reporta un último release con activos adjuntos (ej. `ViMusic-v0.5.4.apk`, `Spotube-windows.exe`), la tarjeta y el modal despliegan un botón destacado de **Descarga Directa** con el nombre del archivo y tamaño real.
-3. **Control de Rate Limit y Configuración de Token**:
-   - En el TopBar se muestra un indicador discreto de cuota restante (ej. `Cuota GitHub: 54/60`).
-   - Al hacer clic en el indicador de cuota o en "Configurar API", el usuario puede pegar un Personal Access Token para desbloquear 5,000 req/hr y probar búsquedas masivas sin interrupciones.
-4. **Verificación de Fuentes de Distribución**:
-   - Enlaces limpios y categorizados según la fuente:
-     - 🏪 **Tienda de Aplicaciones**: F-Droid, IzzyOnDroid, Google Play, App Store.
-     - 📦 **Gestor de Paquetes**: Flathub, Winget, Homebrew, Arch AUR.
-     - ⬇️ **Descarga Directa**: GitHub Releases (.apk, .exe, .dmg, .zip).
-
-#### Visual Identity & Theme
-- Estética oscura de precisión (`#0A0D14`), métricas tabulares mono (`tabular-nums font-mono`), insignias de estado de la API discretas y sin elementos estridentes.
+- **Key User Flows**:
+  1. *Navegación Móvil Impecable*: En cualquier dispositivo móvil (como el capturado en la captura de pantalla), el usuario visualiza el nuevo logo de alas/ondas sonoras junto a **OpenFreedom**, con los botones de idioma (`[ 🇪🇸 ES ]`), cuota (`[ 🔑 60 ]`) y el enlace/icono de GitHub completamente dentro del viewport, con márgenes simétricos de 12px a cada lado.
+  2. *Apertura de Modales Ágil*: Al tocar cualquiera de los botones, el modal se abre con animación de ventana escala 1x pero duración reducida x0.5 (~150ms), apareciendo de forma instantánea sin retrasos perceptibles.
+  3. *Filtrado y Cambio de Vistas*: Al cambiar filtros o alternar entre vista de cuadrícula y lista, los elementos se acomodan de inmediato con transiciones fluidas a 150ms.
+- **Visual Identity & Theme**:
+  - *Logo OpenFreedom*: Isotipo SVG compuesto por barras de resonancia acústica que se elevan y despliegan hacia los lados emulando las alas de un ave en pleno vuelo, con gradiente `from-emerald-400 to-cyan-400` y reflejo sutil.
+  - *Disposición Tipográfica*: Wordmark "OpenFreedom" con peso `font-extrabold tracking-tight text-white`, posicionado debajo del logo o en lockup compacto con balance óptico.
+  - *TopBar Mobile Contract*: Contenedor con `w-full max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between gap-2 overflow-x-hidden`. Los botones de acción usan `shrink-0 text-xs` con padding responsivo `px-2 py-1 sm:px-2.5 sm:py-1.5`.
 
 ---
 
 ### 3. Key Product Decisions & Trade-Offs
 
-- **Decisión 1: Pipeline Híbrido de Caché + IntersectionObserver**
-  - *Enfoque*: Una cola de peticiones con `IntersectionObserver` que prioriza las apps en pantalla, consulta la caché local (`TTL: 1 hora`) y, si expiró, llama a `https://api.github.com/repos/{owner}/{repo}` y `.../releases/latest`.
-  - *Por qué*: Evita agotar los 60 llamados por hora en segundos; solo se consumen llamadas para las aplicaciones que el usuario efectivamente está viendo.
-- **Decisión 2: Token Opcional Almacenado Exclusivamente en `localStorage`**
-  - *Enfoque*: Permitir ingresar un GitHub Personal Access Token con alcance de solo lectura público (`public_repo` o sin permisos especiales), almacenado en el navegador local del cliente.
-  - *Por qué*: Ofrece a los evaluadores y usuarios avanzados 5,000 req/hr sin requerir backend ni exponer credenciales privadas en el servidor.
-- **Decisión 3: Normalización y Corrección de Repositorios en la Base de Datos**
-  - *Enfoque*: Auditar y corregir todas las URLs de los repositorios de chayotic en `src/data/musicApps.ts`, sustituyendo placeholders genéricos por sus identificadores exactos de GitHub (`owner/repo`) y package IDs de F-Droid/Flathub.
+- **Decisión 1: Isotipo SVG en código versus imagen estática**:
+  - *Chosen Approach*: Implementar el logotipo vectorial en un componente React dedicado (`OpenFreedomLogo.tsx`) con trazados SVG matemáticos en gradiente.
+  - *Why*: Carga en 0ms, nitidez perfecta en pantallas Retina/OLED de alta densidad móvil, sin riesgo de URLs externas rotas y fácilmente animable con CSS/Framer Motion.
+- **Decisión 2: Prevenir desbordamiento móvil mediante `min-w-0` y flexbox elástico**:
+  - *Chosen Approach*: Asignar `min-w-0 flex-1 truncate` al contenedor del logo en móvil y `flex items-center gap-1.5 shrink-0` a la zona de acciones, con etiquetas optimizadas (`ES`, `60`, icono GitHub visible).
+  - *Why*: Elimina el bug de recorte del botón derecho visto en la captura del usuario, manteniendo todos los botones operables con área táctil $\ge 40\text{px}$.
+- **Decisión 3: Curvas de animación a escala x0.5 (`150ms cubic-bezier(0.16, 1, 0.3, 1)`)**:
+  - *Chosen Approach*: Sobrescribir las duraciones de transición estándar (que suelen ser de 300ms a 400ms) a 150ms-200ms con aceleración por hardware (`transform`, `opacity`), reduciendo a la mitad el tiempo de espera.
+  - *Why*: Proporciona la sensación de rendimiento instantáneo ("Android 0.5x developer scale") que solicitó el usuario, manteniendo la elegancia visual.
 
 ---
 
 ### 4. Technical Architecture & Data Strategy
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       GitHub API Live Synchronization                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-         ┌────────────────────────────┴────────────────────────────┐
-         ▼                                                         ▼
-┌──────────────────────────────────┐             ┌──────────────────────────────────┐
-│   GitHub Token & Quota Manager   │             │   Intersection Observer Queue    │
-│  (Token modal, Rate limit check, │             │  (Detects visible cards, queues  │
-│   Remaining calls monitor)       │             │   fetch requests sequentially)   │
-└────────────────┬─────────────────┘             └────────────────┬─────────────────┘
-                 │                                                │
-                 ▼                                                ▼
-┌───────────────────────────────────────────────────────────────────────────────────┐
-│                          GitHub REST API Client Engine                            │
-│  - GET https://api.github.com/repos/:owner/:repo                                  │
-│  - GET https://api.github.com/repos/:owner/:repo/releases/latest                 │
-│  - Headers: Accept: application/vnd.github+json, X-GitHub-Api-Version: 2022-11-28│
-│  - LocalStorage Caching Layer with 1-hour TTL                                     │
-└────────────────────────────────────────┬──────────────────────────────────────────┘
-                                         │
-                 ┌───────────────────────┴───────────────────────┐
-                 ▼                                               ▼
-┌──────────────────────────────────┐           ┌────────────────────────────────────┐
-│      Live Card Data Binding      │           │     Verified Sources Resolution    │
-│ - Exact Stargazers & Forks       │           │ - F-Droid: /packages/:id/          │
-│ - Latest Release Tag & Date      │           │ - IzzyOnDroid: /apk/:id            │
-│ - Direct Download Assets (.apk)  │           │ - Flathub: /apps/:id               │
-│ - Last Commit Relative Timestamp │           │ - GitHub Releases / Direct Assets  │
-└──────────────────────────────────┘           └────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│                        Cliente Web OpenFreedom                         │
+│                                                                        │
+│   ┌────────────────────────────────────────────────────────────────┐   │
+│   │                 TopBar.tsx (Responsivo Móvil)                  │   │
+│   │                                                                │   │
+│   │   [ OpenFreedomLogo.tsx ]      [ Acciones Compactas ]          │   │
+│   │   • Alas de onda sonora        • [ 🇪🇸 ES ]                    │   │
+│   │   • Texto "OpenFreedom"        • [ 🔑 60 ]                    │   │
+│   │   • flex shrink balanceado     • [ GitHub Icon ] (¡100% visible!│   │
+│   └────────────────────────────────────────────────────────────────┘   │
+│                                                                        │
+│   ┌────────────────────────────────────────────────────────────────┐   │
+│   │              HeroSection.tsx & Componentes Base                │   │
+│   │   • Logo Expandido con "OpenFreedom" posicionado debajo        │   │
+│   │   • Subtítulo: "Apps de código abierto para escuchar música"   │   │
+│   └────────────────────────────────────────────────────────────────┘   │
+│                                                                        │
+│   ┌────────────────────────────────────────────────────────────────┐   │
+│   │               Motor de Animación Escala 0.5x                   │   │
+│   │   • Transición: 150ms (0.5x duration)                          │   │
+│   │   • Curva: cubic-bezier(0.16, 1, 0.3, 1)                       │   │
+│   │   • Modales: scale(0.96) -> scale(1.0) en 150ms                │   │
+│   │   • Tarjetas & Filtros: micro-feedback instantáneo             │   │
+│   └────────────────────────────────────────────────────────────────┘   │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### Modelo Extendido de Datos en Vivo (`LiveGitHubData`)
-- `repoUrl`: URL canónica verificada devuelta por GitHub.
-- `stars`: Número exacto de estrellas.
-- `forks`: Número de forks.
-- `latestRelease`: { `tagName`: string, `publishedAt`: string, `downloadUrl`: string, `assets`: Array<{ name, downloadUrl, size }> }
-- `lastCommitDate`: Fecha del último push/commit.
-- `openIssues`: Cantidad de issues abiertos.
-- `license`: Nombre normalizado de la licencia detectada por GitHub SPDX.
+- **Archivos a modificar**:
+  - `src/components/OpenFreedomLogo.tsx`: Nuevo componente vectorial del logo con concepto de ondas sonoras en alas de libertad.
+  - `src/components/TopBar.tsx`: Integrar el nuevo logo, marca OpenFreedom y adaptar el layout responsivo móvil para que no se desborde ningún botón.
+  - `src/components/HeroSection.tsx`: Incluir el nuevo logo original con el título "OpenFreedom" posicionado debajo del isotipo.
+  - `src/index.css` & configuración de Tailwind: Definir clases de animación y transiciones aceleradas a escala 0.5x (`duration-150`, curvas de aceleración instantánea).
+  - Modales (`QuotaMonitoringModal`, `LanguageModal`, `PinchtabDashboard`): Ajustar animaciones de entrada a 150ms y centrado seguro en móvil.
+  - `metadata.json`, `index.html` y traducciones: Sincronizar el nombre OpenFreedom manteniendo el subtítulo oficial.

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Github, Music2 } from 'lucide-react';
+import { Github } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { OpenFreedomLogo } from './OpenFreedomLogo';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
@@ -11,9 +12,8 @@ export const Footer: React.FC = () => {
         
         {/* Brand & Attributions */}
         <div className="space-y-1.5 text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-2 text-white font-bold text-sm">
-            <Music2 className="w-4 h-4 text-emerald-400" />
-            <span>OpenStream Directory</span>
+          <div className="flex items-center justify-center md:justify-start gap-2">
+            <OpenFreedomLogo size={24} showText={true} textSize="sm" />
           </div>
           <p className="text-slate-400 max-w-md">
             {t.footer.description}{' '}

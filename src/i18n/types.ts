@@ -17,9 +17,12 @@ export const SUPPORTED_LANGUAGES: LanguageMeta[] = [
 
 export interface TranslationDictionary {
   topBar: {
+    brandName: string;
+    brandSubtitle: string;
     directory: string;
     compareMatrix: string;
     installGuide: string;
+    pinchtab: string;
     language: string;
     apiQuota: string;
     syncGitHub: string;
@@ -228,6 +231,26 @@ export interface TranslationDictionary {
   installGuide: {
     title: string;
     subtitle: string;
+    close: string;
+  };
+  pinchtabModal: {
+    title: string;
+    subtitle: string;
+    tabOverview: string;
+    tabInstances: string;
+    tabAudit: string;
+    tabLogs: string;
+    statusActive: string;
+    statusStopped: string;
+    instancesCount: string;
+    stealthMode: string;
+    accessibilityTokensSaved: string;
+    launchInstance: string;
+    stopAll: string;
+    auditAllApps: string;
+    testAppUrl: string;
+    testUrlPlaceholder: string;
+    runAction: string;
     close: string;
   };
   footer: {

@@ -58,7 +58,7 @@ export const CompareDrawer: React.FC<CompareDrawerProps> = ({
       aria-labelledby="compare-modal-title"
     >
       <div 
-        className="relative w-full max-w-5xl bg-[#0F1420] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-5xl bg-[#0F1420] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-modal-window"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}

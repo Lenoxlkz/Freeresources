@@ -4,6 +4,10 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+
+    /* Escala de animación personalizada (Android 0.5x speed) */
+    --anim-duration-half: 150ms;
+    --anim-ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   body {
@@ -15,10 +19,62 @@
   }
 }
 
+/* Escala de animación de ventana 1x y duración x0.5 */
+@keyframes modalWindowIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes quickFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes cardSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-modal-window {
+  animation: modalWindowIn 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-quick-fade {
+  animation: quickFadeIn 120ms ease-out forwards;
+}
+
+.animate-card-slide {
+  animation: cardSlideIn 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Transiciones fluidas de alto rendimiento x0.5 en controles e interactivos */
+button, a, input, select {
+  transition-duration: 150ms !important;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
 /* Custom subtle scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #0A0D14;

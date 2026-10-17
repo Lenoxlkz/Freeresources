@@ -22,6 +22,7 @@ import { InstallGuideModal } from './components/InstallGuideModal';
 import { LanguageModal } from './components/LanguageModal';
 import { QuotaMonitoringModal } from './components/QuotaMonitoringModal';
 import { ReleaseSelectorModal } from './components/ReleaseSelectorModal';
+import { PinchtabDashboard } from './components/PinchtabDashboard';
 import { Footer } from './components/Footer';
 
 import { Layers, RotateCcw, AlertTriangle, LayoutGrid, List } from 'lucide-react';
@@ -99,6 +100,7 @@ export default function App() {
   const [selectedAppForDetail, setSelectedAppForDetail] = useState<AppItem | null>(null);
   const [selectedAppForReleases, setSelectedAppForReleases] = useState<AppItem | null>(null);
   const [isReleaseSelectorOpen, setIsReleaseSelectorOpen] = useState(false);
+  const [isPinchtabOpen, setIsPinchtabOpen] = useState(false);
 
   // Sincronización robusta en tiempo real de la cuota de GitHub API
   useEffect(() => {
@@ -386,6 +388,7 @@ export default function App() {
         onOpenGuide={() => setIsGuideOpen(true)}
         onOpenTokenModal={() => setIsQuotaModalOpen(true)}
         onOpenLanguageModal={() => setIsLanguageModalOpen(true)}
+        onOpenPinchtab={() => setIsPinchtabOpen(true)}
         onSyncGitHub={handleSyncGitHub}
         isSyncing={isSyncing}
         lastSyncedAt={lastSyncedAt}
@@ -592,6 +595,13 @@ export default function App() {
           fetchRateLimitNow().then(setRateLimit);
         }}
         currentRateLimit={rateLimit}
+      />
+
+      {/* Panel de Control y Automatización Pinchtab */}
+      <PinchtabDashboard
+        isOpen={isPinchtabOpen}
+        onClose={() => setIsPinchtabOpen(false)}
+        apps={apps}
       />
 
       {/* Clean Accessible Footer */}

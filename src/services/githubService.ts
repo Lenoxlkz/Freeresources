@@ -80,18 +80,18 @@ export function getStoredRateLimit(): RateLimitState {
     const raw = localStorage.getItem(GITHUB_RATELIMIT_KEY);
     if (raw) {
       const parsed: RateLimitState = JSON.parse(raw);
-      // Si el límite guardado es 60 (de una sesión previa no autenticada), lo descartamos
-      // para no dejar la UI congelada en 56 / 60
-      if (parsed && typeof parsed.limit === 'number' && parsed.limit > 60) {
+      if (parsed && typeof parsed.limit === 'number') {
         return parsed;
       }
     }
   } catch {
     // Fallthrough
   }
+  const custom = getUserCustomToken();
+  const defaultLimit = custom ? 5000 : 60;
   return {
-    limit: 5000,
-    remaining: 5000,
+    limit: defaultLimit,
+    remaining: defaultLimit,
     resetTime: Math.floor(Date.now() / 1000) + 3600,
   };
 }
