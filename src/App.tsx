@@ -8,8 +8,10 @@ import {
   fetchRepoFromGitHubAPI,
   fetchRateLimitNow,
   subscribeToRateLimit,
+  subscribeToAutoPurge,
   getLastSyncTime
 } from './services/githubService';
+import { loadUserPosition, saveUserPosition } from './services/userPositionStore';
 
 import { TopBar } from './components/TopBar';
 import { HeroSection } from './components/HeroSection';
@@ -25,7 +27,7 @@ import { ReleaseSelectorModal } from './components/ReleaseSelectorModal';
 import { PinchtabDashboard } from './components/PinchtabDashboard';
 import { Footer } from './components/Footer';
 
-import { Layers, RotateCcw, AlertTriangle, LayoutGrid, List } from 'lucide-react';
+import { Layers, RotateCcw, AlertTriangle, LayoutGrid, List, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from './i18n/LanguageContext';
 
 const COMPARE_STORAGE_KEY = 'openstream_compared_app_ids';
@@ -135,6 +137,121 @@ export default function App() {
   const handleOpenReleaseSelector = useCallback((app: AppItem) => {
     setSelectedAppForReleases(app);
     setIsReleaseSelectorOpen(true);
+  }, []);
+
+  // Notificación de Purga de Almacenamiento (Ciclo 50 o manual)
+  const [autoPurgeToast, setAutoPurgeToast] = useState<string | null>(null);
+  const [hasRestoredPosition, setHasRestoredPosition] = useState(false);
+
+  // 1. Restaurar posición del usuario desde IndexedDB aislado (inmune a purgas de cookies/storage)
+  useEffect(() => {
+    let mounted = true;
+    loadUserPosition().then((pos) => {
+      if (!mounted || !pos) {
+        setHasRestoredPosition(true);
+        return;
+      }
+
+      if (pos.searchQuery) setSearchQuery(pos.searchQuery);
+      if (pos.category) setSelectedCategory(pos.category as any);
+      if (Array.isArray(pos.platforms)) setSelectedPlatforms(pos.platforms as any);
+      if (pos.sortBy) setSortBy(pos.sortBy);
+      if (pos.viewMode) setViewMode(pos.viewMode);
+      if (pos.activeAppId) {
+        const target = MUSIC_APPS_DATABASE.find((a) => a.id === pos.activeAppId);
+        if (target) setSelectedAppForDetail(target);
+      }
+
+      if (typeof pos.scrollY === 'number' && pos.scrollY > 0) {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: pos.scrollY, behavior: 'instant' });
+        });
+      }
+      setHasRestoredPosition(true);
+    }).catch(() => {
+      setHasRestoredPosition(true);
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // 2. Persistir posición del usuario en tiempo real en IndexedDB aislado
+  useEffect(() => {
+    if (!hasRestoredPosition) return;
+
+    const timeout = setTimeout(() => {
+      saveUserPosition({
+        scrollY: window.scrollY || 0,
+        searchQuery,
+        category: selectedCategory,
+        platforms: selectedPlatforms,
+        sortBy,
+        viewMode,
+        activeAppId: selectedAppForDetail?.id || null,
+        updatedAt: Date.now(),
+      });
+    }, 250);
+
+    return () => clearTimeout(timeout);
+  }, [
+    hasRestoredPosition,
+    searchQuery,
+    selectedCategory,
+    selectedPlatforms,
+    sortBy,
+    viewMode,
+    selectedAppForDetail,
+  ]);
+
+  // Listener de scroll para recordar exactamente por dónde quedó el usuario
+  useEffect(() => {
+    if (!hasRestoredPosition) return;
+
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          saveUserPosition({
+            scrollY: window.scrollY || 0,
+            searchQuery,
+            category: selectedCategory,
+            platforms: selectedPlatforms,
+            sortBy,
+            viewMode,
+            activeAppId: selectedAppForDetail?.id || null,
+            updatedAt: Date.now(),
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [
+    hasRestoredPosition,
+    searchQuery,
+    selectedCategory,
+    selectedPlatforms,
+    sortBy,
+    viewMode,
+    selectedAppForDetail,
+  ]);
+
+  // 3. Suscribirse al evento de Auto-Purga al alcanzar 50 requests
+  useEffect(() => {
+    const unsub = subscribeToAutoPurge((info) => {
+      setAutoPurgeToast(
+        info.reason === '50_requests_consumed'
+          ? '¡Ciclo de 50 peticiones alcanzado! Cookies y almacenamiento purgados. Nueva cuota de 60 req/h iniciada.'
+          : 'Almacenamiento y cookies purgados. Nueva identidad cliente generada.'
+      );
+      setTimeout(() => setAutoPurgeToast(null), 5000);
+    });
+    return unsub;
   }, []);
 
   // GitHub Sync State
@@ -603,6 +720,30 @@ export default function App() {
         onClose={() => setIsPinchtabOpen(false)}
         apps={apps}
       />
+
+      {/* Toast Flotante de Purga Agresiva y Renovación de Cuota */}
+      {autoPurgeToast && (
+        <aside 
+          aria-live="polite"
+          className="fixed bottom-6 right-6 z-50 max-w-md bg-emerald-950/95 border border-emerald-500/70 text-emerald-200 px-4 py-3 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-3 animate-fade-in"
+        >
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+            <Sparkles className="w-4 h-4" />
+          </div>
+          <div className="text-xs leading-relaxed font-sans">
+            <p className="font-semibold text-white">Ciclo de Cuota Actualizado</p>
+            <p className="text-emerald-300/90 text-[11px] mt-0.5">{autoPurgeToast}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setAutoPurgeToast(null)}
+            className="ml-auto text-emerald-400 hover:text-white p-1 rounded cursor-pointer text-xs"
+            aria-label="Cerrar notificación"
+          >
+            ✕
+          </button>
+        </aside>
+      )}
 
       {/* Clean Accessible Footer */}
       <Footer />

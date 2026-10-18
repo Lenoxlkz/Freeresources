@@ -11,7 +11,10 @@ import {
   Radio,
   Check,
   Clock,
-  Activity
+  Activity,
+  Fingerprint,
+  Cookie,
+  Sparkles
 } from 'lucide-react';
 import { 
   setStoredGitHubToken, 
@@ -21,6 +24,8 @@ import {
   DEFAULT_GITHUB_TOKEN,
   verifyGitHubConnection, 
   fetchRateLimitNow,
+  getClientSession,
+  resetClientSessionAndQuota,
   RateLimitState 
 } from '../services/githubService';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -45,6 +50,8 @@ export const QuotaMonitoringModal: React.FC<QuotaMonitoringModalProps> = ({
   const [syncingQuota, setSyncingQuota] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [statusType, setStatusType] = useState<'success' | 'error' | null>(null);
+  const [sessionInfo, setSessionInfo] = useState(() => getClientSession());
+  const [isPurging, setIsPurging] = useState(false);
 
   // Test mode simulation for countdown when remaining = 0
   const [simulatedZero, setSimulatedZero] = useState(false);
@@ -91,6 +98,7 @@ export const QuotaMonitoringModal: React.FC<QuotaMonitoringModalProps> = ({
   // Synchronize state on open
   useEffect(() => {
     if (isOpen) {
+      setSessionInfo(getClientSession());
       const isDefault = isUsingDefaultToken();
       if (isDefault) {
         setTokenMode('default');
@@ -104,6 +112,18 @@ export const QuotaMonitoringModal: React.FC<QuotaMonitoringModalProps> = ({
       setStatusType(null);
     }
   }, [isOpen]);
+
+  const handlePurgeAndResetSession = () => {
+    setIsPurging(true);
+    const newSession = resetClientSessionAndQuota();
+    setSessionInfo(newSession);
+    setStatusType('success');
+    setStatusMessage('Cookies y huellas residuales eliminadas. Sesión única iniciada con 60 req/h limpias.');
+    onTokenUpdated();
+    setTimeout(() => {
+      setIsPurging(false);
+    }, 500);
+  };
 
   // Close on Escape key
   useEffect(() => {
@@ -290,6 +310,87 @@ export const QuotaMonitoringModal: React.FC<QuotaMonitoringModalProps> = ({
                 className="text-[10px] text-slate-400 hover:text-slate-300 underline font-mono cursor-pointer"
               >
                 {simulatedZero ? 'Desactivar simulación 0' : 'Probar cuenta regresiva 60 min'}
+              </button>
+            </div>
+          </div>
+
+          {/* User-Agent & Unique Session Isolation Card */}
+          <div className="p-4 bg-slate-900/90 border border-emerald-500/30 rounded-xl space-y-3 shadow-inner">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Fingerprint className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="text-xs font-bold text-white tracking-wide">
+                  Aislamiento Único por Navegador y Usuario
+                </span>
+              </div>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold flex items-center gap-1">
+                <Sparkles className="w-2.5 h-2.5" />
+                Cuota Descentralizada 60 req/h
+              </span>
+            </div>
+
+            <div className="space-y-2 text-[11px] font-mono bg-slate-950/70 p-3 rounded-lg border border-slate-800">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-slate-400">ID de Sesión Cliente:</span>
+                <strong className="text-emerald-300 font-mono text-[10px] px-1.5 py-0.5 bg-slate-900 rounded border border-slate-800">
+                  {sessionInfo.sessionId}
+                </strong>
+              </div>
+              <div className="flex items-start justify-between gap-2">
+                <span className="text-slate-400 shrink-0">User-Agent:</span>
+                <span className="text-slate-300 text-[10px] max-w-[260px] truncate text-right" title={sessionInfo.userAgent}>
+                  {sessionInfo.userAgent}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-slate-400">Estado de Almacenamiento:</span>
+                <span className="text-emerald-400 text-[10px] flex items-center gap-1 font-sans font-semibold">
+                  <Cookie className="w-3 h-3 text-emerald-400" /> Sesión Efímera Limpia (Sin residuos)
+                </span>
+              </div>
+
+              {/* Ciclo de 50 Requests con Auto-Purga */}
+              <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-slate-400 flex items-center gap-1">
+                    <Activity className="w-3 h-3 text-emerald-400" />
+                    Ciclo de Auto-Purga (cada 50 req):
+                  </span>
+                  <strong className="text-emerald-400 font-mono">
+                    {sessionInfo.consumedInCycle || consumedRequests} / 50 gastadas
+                  </strong>
+                </div>
+                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
+                  <div 
+                    className="h-full bg-gradient-to-r from-emerald-500 to-amber-500 transition-all duration-300"
+                    style={{ width: `${Math.min(100, (((sessionInfo.consumedInCycle || consumedRequests) / 50) * 100))}%` }}
+                  />
+                </div>
+                <p className="text-[10px] text-slate-400 font-sans leading-tight">
+                  Al alcanzar 50 solicitudes gastadas, el sistema purga automáticamente todas las cookies y storage residuales e inicia un nuevo ciclo limpio con 60 req/h.
+                </p>
+              </div>
+
+              {/* Memoria de navegación protegida */}
+              <div className="p-2 bg-emerald-950/25 border border-emerald-500/20 rounded-md text-[10px] font-sans text-emerald-300 flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>Tu posición (scroll y filtros) se preserva aislada en IndexedDB y nunca es borrada por las purgas.</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <p className="text-[10px] text-slate-400 leading-snug">
+                Purga manual inmediata de cookies, almacenamiento y regeneración de ID de sesión.
+              </p>
+              <button
+                type="button"
+                onClick={handlePurgeAndResetSession}
+                disabled={isPurging}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-white border border-rose-500/30 transition-colors shrink-0 cursor-pointer"
+                title="Borra cookies y genera una nueva cuota independiente"
+              >
+                <Trash2 className={`w-3.5 h-3.5 ${isPurging ? 'animate-spin' : ''}`} />
+                <span>{isPurging ? 'Limpiando...' : 'Limpiar y regenerar'}</span>
               </button>
             </div>
           </div>

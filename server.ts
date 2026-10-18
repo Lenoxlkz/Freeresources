@@ -73,6 +73,20 @@ async function startAppServer() {
 
   app.use(express.json());
 
+  // Encabezados anti-caché para APIs dinámicas para evitar reutilización indebida de sesiones
+  app.use('/api', (_req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    next();
+  });
+
+  // Endpoint para purga total de cookies y almacenamiento del navegador
+  app.post('/api/session/purge', (_req: Request, res: Response) => {
+    res.setHeader('Clear-Site-Data', '"cookies", "storage"');
+    return res.json({ success: true, message: 'Sesión y almacenamiento purgados' });
+  });
+
   // Proactivar servicio Pinchtab en segundo plano
   ensurePinchtabServer().catch((e) => console.error(e));
 

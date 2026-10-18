@@ -1,12 +1,44 @@
 import { GitHubRepoStats, ReleaseAsset, GitHubRelease } from '../types/app';
+import { 
+  getOrCreateClientSession, 
+  getSessionRateLimit, 
+  saveSessionRateLimit, 
+  executeCycleReset, 
+  registerRequestConsumed,
+  initSessionLifecycle,
+  subscribeToAutoPurge,
+  AUTO_PURGE_THRESHOLD,
+  ClientSessionInfo
+} from './sessionManager';
 
-const GITHUB_TOKEN_KEY = 'openstream_github_pat_token';
-const GITHUB_CACHE_KEY = 'openstream_github_live_cache_v2';
-const GITHUB_RELEASES_CACHE_KEY = 'openstream_github_multi_releases_cache';
-const GITHUB_RATELIMIT_KEY = 'openstream_github_ratelimit_info';
+// Inicializar el ciclo de vida de limpieza al entrar y salir
+if (typeof window !== 'undefined') {
+  initSessionLifecycle();
+}
+
+export { subscribeToAutoPurge, AUTO_PURGE_THRESHOLD };
+
+const GITHUB_TOKEN_KEY = 'openfreedom_github_pat_token';
+const GITHUB_CACHE_KEY = 'openfreedom_github_live_cache_v3';
+const GITHUB_RELEASES_CACHE_KEY = 'openfreedom_github_multi_releases_cache_v3';
 const CACHE_TTL_MS = 1000 * 60 * 60 * 2; // 2 hours
 
-const GITHUB_TIMESTAMP_KEY = 'openstream_github_stats_timestamp';
+const GITHUB_TIMESTAMP_KEY = 'openfreedom_github_stats_timestamp';
+
+export function getClientSession(): ClientSessionInfo {
+  return getOrCreateClientSession();
+}
+
+export function resetClientSessionAndQuota(): ClientSessionInfo {
+  const newSession = executeCycleReset('user_requested_reset');
+  const resetRate: RateLimitState = {
+    limit: 60,
+    remaining: 60,
+    resetTime: Math.floor(Date.now() / 1000) + 3600,
+  };
+  notifyRateLimitChanged(resetRate);
+  return newSession;
+}
 
 export function getLastSyncTime(): string | null {
   try {
@@ -30,8 +62,6 @@ export interface RateLimitState {
   resetTime: number; // Unix timestamp in seconds
 }
 
-// Sin token embebido: cualquier valor aquí se publica en el bundle del navegador.
-// Sin token se usa la API anónima (60 req/h); el usuario puede añadir el suyo desde el modal de cuota.
 export const DEFAULT_GITHUB_TOKEN = '';
 
 export function getUserCustomToken(): string | null {
@@ -76,24 +106,8 @@ export function resetToDefaultToken(): void {
 }
 
 export function getStoredRateLimit(): RateLimitState {
-  try {
-    const raw = localStorage.getItem(GITHUB_RATELIMIT_KEY);
-    if (raw) {
-      const parsed: RateLimitState = JSON.parse(raw);
-      if (parsed && typeof parsed.limit === 'number') {
-        return parsed;
-      }
-    }
-  } catch {
-    // Fallthrough
-  }
   const custom = getUserCustomToken();
-  const defaultLimit = custom ? 5000 : 60;
-  return {
-    limit: defaultLimit,
-    remaining: defaultLimit,
-    resetTime: Math.floor(Date.now() / 1000) + 3600,
-  };
+  return getSessionRateLimit(!!custom);
 }
 
 type RateLimitListener = (rate: RateLimitState) => void;
@@ -127,11 +141,7 @@ function updateRateLimitFromHeaders(headers: Headers): void {
       remaining: parseInt(remainingHeader, 10),
       resetTime: parseInt(resetHeader, 10),
     };
-    try {
-      localStorage.setItem(GITHUB_RATELIMIT_KEY, JSON.stringify(state));
-    } catch {
-      // Ignore
-    }
+    saveSessionRateLimit(state);
     notifyRateLimitChanged(state);
   }
 }
@@ -163,11 +173,7 @@ export async function fetchRateLimitNow(): Promise<RateLimitState> {
         remaining: rate.remaining ?? 0,
         resetTime: rate.reset ?? (Math.floor(Date.now() / 1000) + 3600),
       };
-      try {
-        localStorage.setItem(GITHUB_RATELIMIT_KEY, JSON.stringify(state));
-      } catch {
-        // Ignore
-      }
+      saveSessionRateLimit(state);
       notifyRateLimitChanged(state);
       return state;
     }
@@ -239,6 +245,7 @@ export async function fetchRepoFromGitHubAPI(
       });
 
       updateRateLimitFromHeaders(repoRes.headers);
+      registerRequestConsumed();
 
       if (repoRes.status === 403 || repoRes.status === 429) {
         // Rate limited
@@ -413,6 +420,7 @@ export async function fetchAppReleases(
       { headers }
     );
     updateRateLimitFromHeaders(res.headers);
+    registerRequestConsumed();
 
     if (!res.ok) {
       return [];
